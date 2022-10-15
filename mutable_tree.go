@@ -346,7 +346,10 @@ func (tree *MutableTree) remove(key []byte) (value []byte, orphaned []*Node, rem
 		return nil, nil, false, nil
 	}
 
-	tree.addUnsavedRemoval(key)
+	// tree.addUnsavedRemoval(key)
+	if !tree.skipFastStorageUpgrade {
+		tree.addUnsavedRemoval(key)
+	}
 
 	if newRoot == nil && newRootHash != nil {
 		tree.root, err = tree.ndb.GetNode(newRootHash)
